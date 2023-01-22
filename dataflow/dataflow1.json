@@ -1,0 +1,64 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "MoviesInfo"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Delimited_outputflat",
+						"type": "DatasetReference"
+					},
+					"name": "sinkflat"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText_outputagg",
+						"type": "DatasetReference"
+					},
+					"name": "sinkagg"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ModifyColumns"
+				},
+				{
+					"name": "aggregateByYear"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          movieId as string,",
+				"          title as string,",
+				"          genres as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> MoviesInfo",
+				"MoviesInfo derive(year = toInteger(trim(right(title, 6), '()')),",
+				"          title = toString(left(title, length(title)-6))) ~> ModifyColumns",
+				"ModifyColumns aggregate(groupBy(year),",
+				"     movieId = count()) ~> aggregateByYear",
+				"ModifyColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkflat",
+				"aggregateByYear sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkagg"
+			]
+		}
+	}
+}
