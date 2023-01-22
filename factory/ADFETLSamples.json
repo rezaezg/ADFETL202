@@ -1,0 +1,9 @@
+{
+	"name": "ADFETLSamples",
+	"location": "westus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "217c22f0-efb1-4063-b50d-74f1c59f4a31",
+		"tenantId": "cb722ba1-362f-40d1-bc2f-2d5574a27b0a"
+	}
+}
