@@ -1,0 +1,9 @@
+{
+	"name": "developsameladf01",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f785a3a4-fa4b-40f7-b32f-a61c623d72b9",
+		"tenantId": "cb722ba1-362f-40d1-bc2f-2d5574a27b0a"
+	}
+}
